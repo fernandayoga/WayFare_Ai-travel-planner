@@ -20,14 +20,14 @@ export function BudgetBreakdown({
       <div className="flex items-baseline justify-between">
         <div>
           <p className="text-xs font-medium uppercase tracking-wide text-ink-soft">
-            Estimated total
+            Estimasi total
           </p>
           <p className="font-display text-3xl text-ink">
             {formatCurrency(breakdown.total, breakdown.currency)}
           </p>
         </div>
         <div className="text-right">
-          <p className="text-xs font-medium uppercase tracking-wide text-ink-soft">Planned budget</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-ink-soft">Budget direncanakan</p>
           <p className={overBudget ? "text-sm font-medium text-danger" : "text-sm font-medium text-moss-dark"}>
             {formatCurrency(plannedBudget, breakdown.currency)}
           </p>
@@ -36,7 +36,7 @@ export function BudgetBreakdown({
 
       {overBudget && (
         <p className="mt-3 rounded-md bg-danger-tint px-3 py-2 text-xs text-danger">
-          This plan runs above your budget. Ask the assistant to trim costs, or increase your budget when editing the trip.
+          Rencana ini melebihi Budget Anda. Minta asisten untuk memangkas biaya, atau naikkan Budget saat mengedit trip.
         </p>
       )}
 

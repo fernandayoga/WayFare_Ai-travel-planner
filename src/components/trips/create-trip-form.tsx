@@ -22,18 +22,18 @@ import { useToast } from "@/components/ui/use-toast";
 import type { Interest, TravelStyle } from "@/models/Trip";
 
 const STEPS = [
-  { key: "destination", label: "Destination", icon: MapPin },
-  { key: "budget", label: "Travelers & budget", icon: Wallet },
-  { key: "style", label: "Travel style", icon: Sparkles },
-  { key: "interests", label: "Interests", icon: Heart },
+  { key: "destination", label: "Tujuan", icon: MapPin },
+  { key: "budget", label: "Wisatawan & Budget", icon: Wallet },
+  { key: "style", label: "Gaya liburan", icon: Sparkles },
+  { key: "interests", label: "Minat", icon: Heart },
 ] as const;
 
 const LOADING_MESSAGES = [
-  "Reading up on your destination...",
-  "Balancing sightseeing and downtime...",
-  "Pricing out activities and meals...",
-  "Building your day-by-day plan...",
-  "Double-checking the budget adds up...",
+  "Mempelajari destinasi Anda...",
+  "Menyeimbangkan jadwal dan waktu istirahat...",
+  "Menghitung estimasi biaya...",
+  "Menyusun Itinerary harian...",
+  "Memastikan Budget tetap sesuai...",
 ];
 
 type FormState = {
@@ -90,20 +90,20 @@ export function CreateTripForm() {
 
   function validateStep(index: number): string | null {
     if (index === 0) {
-      if (!form.destination.trim()) return "Tell us where you're headed";
-      if (!form.startDate || !form.endDate) return "Pick your travel dates";
+      if (!form.destination.trim()) return "Beritahu kami tujuan Anda";
+      if (!form.startDate || !form.endDate) return "Pilih tanggal perjalanan Anda";
       if (new Date(form.endDate) < new Date(form.startDate))
-        return "End date must be on or after the start date";
+        return "Tanggal selesai harus sama atau setelah tanggal mulai";
     }
     if (index === 1) {
-      if (!form.travelers || Number(form.travelers) < 1) return "At least 1 traveler";
-      if (!form.budget || Number(form.budget) <= 0) return "Enter a budget greater than 0";
+      if (!form.travelers || Number(form.travelers) < 1) return "Minimal 1 orang";
+      if (!form.budget || Number(form.budget) <= 0) return "Masukkan Budget lebih besar dari 0";
     }
     if (index === 2) {
-      if (!form.travelStyle) return "Pick a travel style";
+      if (!form.travelStyle) return "Pilih gaya liburan";
     }
     if (index === 3) {
-      if (form.interests.length === 0) return "Pick at least one interest";
+      if (form.interests.length === 0) return "Pilih minimal satu minat";
     }
     return null;
   }
@@ -143,7 +143,7 @@ export function CreateTripForm() {
 
     const parsed = createTripSchema.safeParse(payload);
     if (!parsed.success) {
-      setError(parsed.error.issues[0]?.message ?? "Check your details and try again");
+      setError(parsed.error.issues[0]?.message ?? "Periksa kembali detail Anda dan coba lagi");
       return;
     }
 
@@ -158,24 +158,24 @@ export function CreateTripForm() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error ?? "Couldn't create this trip");
+        setError(data.error ?? "Tidak dapat membuat trip ini");
         setSubmitting(false);
         return;
       }
 
       if (data.status === "error") {
         toast({
-          title: "The AI planner had trouble with this trip",
-          description: "You can retry generation from the trip page.",
+          title: "AI perencana mengalami kendala",
+          description: "Anda bisa mencoba membuat ulang dari halaman trip.",
           variant: "destructive",
         });
       } else {
-        toast({ title: "Itinerary ready", description: "Your trip has been planned.", variant: "success" });
+        toast({ title: "Itinerary siap", description: "Perjalanan Anda telah direncanakan.", variant: "success" });
       }
 
       router.push(`/trips/${data.id}`);
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError("Terjadi kesalahan. Silakan coba lagi.");
       setSubmitting(false);
     }
   }
@@ -185,11 +185,11 @@ export function CreateTripForm() {
       <Card className="flex flex-col items-center justify-center gap-4 px-8 py-20 text-center">
         <Loader2 className="h-8 w-8 animate-spin text-moss" />
         <div>
-          <p className="font-display text-xl text-ink">Planning {form.destination}</p>
+          <p className="font-display text-xl text-ink">Merencanakan {form.destination}</p>
           <p className="mt-1 text-sm text-ink-soft">{LOADING_MESSAGES[loadingMsgIndex]}</p>
         </div>
         <p className="max-w-xs text-xs text-ink-soft/70">
-          This usually takes 10–30 seconds. Please don&rsquo;t close this tab.
+          Biasanya membutuhkan 10–30 detik. Mohon jangan tutup tab ini.
         </p>
       </Card>
     );
@@ -227,14 +227,14 @@ export function CreateTripForm() {
         {step === 0 && (
           <div className="space-y-5">
             <div>
-              <h2 className="font-display text-xl text-ink">Where are you headed?</h2>
-              <p className="text-sm text-ink-soft">A city, region, or country works.</p>
+              <h2 className="font-display text-xl text-ink">Ke mana tujuan Anda?</h2>
+              <p className="text-sm text-ink-soft">Bisa berupa nama kota, wilayah, atau negara.</p>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="destination">Destination</Label>
+              <Label htmlFor="destination">Tujuan</Label>
               <Input
                 id="destination"
-                placeholder="e.g. Kyoto, Japan"
+                placeholder="contoh: Kyoto, Jepang"
                 value={form.destination}
                 onChange={(e) => update("destination", e.target.value)}
                 autoFocus
@@ -242,7 +242,7 @@ export function CreateTripForm() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <Label htmlFor="startDate">Start date</Label>
+                <Label htmlFor="startDate">Tanggal mulai</Label>
                 <Input
                   id="startDate"
                   type="date"
@@ -251,7 +251,7 @@ export function CreateTripForm() {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="endDate">End date</Label>
+                <Label htmlFor="endDate">Tanggal selesai</Label>
                 <Input
                   id="endDate"
                   type="date"
@@ -267,11 +267,11 @@ export function CreateTripForm() {
         {step === 1 && (
           <div className="space-y-5">
             <div>
-              <h2 className="font-display text-xl text-ink">Travelers &amp; budget</h2>
-              <p className="text-sm text-ink-soft">Budget covers the whole trip, all travelers combined.</p>
+              <h2 className="font-display text-xl text-ink">Wisatawan &amp; Budget</h2>
+              <p className="text-sm text-ink-soft">Budget ini mencakup keseluruhan pengeluaran semua wisatawan.</p>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="travelers">Number of travelers</Label>
+              <Label htmlFor="travelers">Jumlah wisatawan</Label>
               <Input
                 id="travelers"
                 type="number"
@@ -283,7 +283,7 @@ export function CreateTripForm() {
             </div>
             <div className="grid grid-cols-[1fr_auto] gap-4">
               <div className="space-y-1.5">
-                <Label htmlFor="budget">Total budget</Label>
+                <Label htmlFor="budget">Total Budget</Label>
                 <Input
                   id="budget"
                   type="number"
@@ -294,7 +294,7 @@ export function CreateTripForm() {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="currency">Currency</Label>
+                <Label htmlFor="currency">Mata uang</Label>
                 <Select value={form.currency} onValueChange={(v) => update("currency", v as FormState["currency"])}>
                   <SelectTrigger id="currency" className="w-28">
                     <SelectValue />
@@ -315,8 +315,8 @@ export function CreateTripForm() {
         {step === 2 && (
           <div className="space-y-5">
             <div>
-              <h2 className="font-display text-xl text-ink">What&rsquo;s your pace?</h2>
-              <p className="text-sm text-ink-soft">This shapes how packed each day feels.</p>
+              <h2 className="font-display text-xl text-ink">Bagaimana gaya liburan Anda?</h2>
+              <p className="text-sm text-ink-soft">Ini akan menentukan sepadat apa jadwal setiap harinya.</p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               {TRAVEL_STYLE_OPTIONS.map((opt) => (
@@ -342,8 +342,8 @@ export function CreateTripForm() {
         {step === 3 && (
           <div className="space-y-5">
             <div>
-              <h2 className="font-display text-xl text-ink">What are you into?</h2>
-              <p className="text-sm text-ink-soft">Pick as many as fit - this steers the activities.</p>
+              <h2 className="font-display text-xl text-ink">Apa saja minat Anda?</h2>
+              <p className="text-sm text-ink-soft">Pilih sebanyak yang cocok - ini akan menentukan jenis aktivitasnya.</p>
             </div>
             <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
               {INTEREST_OPTIONS.map((opt) => {
@@ -375,15 +375,15 @@ export function CreateTripForm() {
 
         <div className="mt-8 flex items-center justify-between">
           <Button type="button" variant="ghost" onClick={goBack} disabled={step === 0}>
-            <ArrowLeft className="h-4 w-4" /> Back
+            <ArrowLeft className="h-4 w-4" /> Kembali
           </Button>
           {step < STEPS.length - 1 ? (
             <Button type="button" variant="primary" onClick={goNext}>
-              Next <ArrowRight className="h-4 w-4" />
+              Lanjut <ArrowRight className="h-4 w-4" />
             </Button>
           ) : (
             <Button type="button" variant="primary" onClick={handleSubmit}>
-              <Sparkles className="h-4 w-4" /> Generate itinerary
+              <Sparkles className="h-4 w-4" /> Buat Itinerary
             </Button>
           )}
         </div>

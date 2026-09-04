@@ -5,20 +5,20 @@ export function StatusBadge({ status }: { status: "generating" | "ready" | "erro
   if (status === "generating") {
     return (
       <Badge variant="gold">
-        <Loader2 className="h-3 w-3 animate-spin" /> Generating
+        <Loader2 className="h-3 w-3 animate-spin" /> Sedang Dibuat
       </Badge>
     );
   }
   if (status === "error") {
     return (
       <Badge variant="danger">
-        <AlertTriangle className="h-3 w-3" /> Failed
+        <AlertTriangle className="h-3 w-3" /> Gagal
       </Badge>
     );
   }
   return (
     <Badge variant="default">
-      <CheckCircle2 className="h-3 w-3" /> Ready
+      <CheckCircle2 className="h-3 w-3" /> Siap
     </Badge>
   );
 }

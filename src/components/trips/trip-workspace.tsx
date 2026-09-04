@@ -56,7 +56,7 @@ export function TripWorkspace({
               {itinerary.budgetBreakdown ? (
                 <BudgetBreakdown breakdown={itinerary.budgetBreakdown} plannedBudget={budget} />
               ) : (
-                <p className="text-sm text-ink-soft">No budget breakdown yet.</p>
+                <p className="text-sm text-ink-soft">Belum ada rincian Budget.</p>
               )}
             </Card>
           </TabsContent>

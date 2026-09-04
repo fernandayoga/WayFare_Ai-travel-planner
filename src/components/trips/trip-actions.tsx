@@ -66,11 +66,11 @@ export function TripActions({
         }),
       });
       if (!res.ok) throw new Error();
-      toast({ title: "Trip updated", variant: "success" });
+      toast({ title: "Trip diperbarui", variant: "success" });
       setEditOpen(false);
       router.refresh();
     } catch {
-      toast({ title: "Couldn't save changes", variant: "destructive" });
+      toast({ title: "Tidak dapat menyimpan perubahan", variant: "destructive" });
     } finally {
       setSaving(false);
     }
@@ -81,11 +81,11 @@ export function TripActions({
     try {
       const res = await fetch(`/api/trips/${tripId}`, { method: "DELETE" });
       if (!res.ok) throw new Error();
-      toast({ title: "Trip deleted", variant: "success" });
+      toast({ title: "Trip dihapus", variant: "success" });
       router.push("/trips");
       router.refresh();
     } catch {
-      toast({ title: "Couldn't delete this trip", variant: "destructive" });
+      toast({ title: "Tidak dapat menghapus trip ini", variant: "destructive" });
       setDeleting(false);
     }
   }
@@ -95,10 +95,10 @@ export function TripActions({
     try {
       const res = await fetch(`/api/trips/${tripId}/regenerate`, { method: "POST" });
       if (!res.ok) throw new Error();
-      toast({ title: "Itinerary regenerated", variant: "success" });
+      toast({ title: "Itinerary dibuat ulang", variant: "success" });
       router.refresh();
     } catch {
-      toast({ title: "Regeneration failed", variant: "destructive" });
+      toast({ title: "Pembuatan ulang gagal", variant: "destructive" });
     } finally {
       setRegenerating(false);
     }
@@ -114,7 +114,7 @@ export function TripActions({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onSelect={() => setEditOpen(true)}>
-            <Pencil className="mr-2 h-4 w-4" /> Edit details
+            <Pencil className="mr-2 h-4 w-4" /> Edit detail
           </DropdownMenuItem>
           {status !== "generating" && (
             <DropdownMenuItem onSelect={handleRegenerate} disabled={regenerating}>
@@ -123,12 +123,12 @@ export function TripActions({
               ) : (
                 <RefreshCcw className="mr-2 h-4 w-4" />
               )}
-              Regenerate itinerary
+              Buat ulang Itinerary
             </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />
           <DropdownMenuItem className="text-danger" onSelect={() => setDeleteOpen(true)}>
-            <Trash2 className="mr-2 h-4 w-4" /> Delete trip
+            <Trash2 className="mr-2 h-4 w-4" /> Hapus trip
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -136,14 +136,14 @@ export function TripActions({
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit trip details</DialogTitle>
+            <DialogTitle>Edit detail trip</DialogTitle>
             <DialogDescription>
-              Changing these won&rsquo;t regenerate the itinerary automatically.
+              Mengubah ini tidak akan membuat ulang Itinerary secara otomatis.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="edit-destination">Destination</Label>
+              <Label htmlFor="edit-destination">Tujuan</Label>
               <Input
                 id="edit-destination"
                 value={form.destination}
@@ -152,7 +152,7 @@ export function TripActions({
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <Label htmlFor="edit-travelers">Travelers</Label>
+                <Label htmlFor="edit-travelers">Wisatawan</Label>
                 <Input
                   id="edit-travelers"
                   type="number"
@@ -175,11 +175,11 @@ export function TripActions({
           </div>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setEditOpen(false)}>
-              Cancel
+              Batal
             </Button>
             <Button variant="primary" onClick={saveEdit} disabled={saving}>
               {saving && <Loader2 className="h-4 w-4 animate-spin" />}
-              Save changes
+              Simpan perubahan
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -188,18 +188,18 @@ export function TripActions({
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete this trip?</DialogTitle>
+            <DialogTitle>Hapus trip ini?</DialogTitle>
             <DialogDescription>
-              This permanently deletes the itinerary and budget for {destination}. This can&rsquo;t be undone.
+              Ini akan menghapus Itinerary dan Budget untuk {destination} secara permanen. Tindakan ini tidak dapat dibatalkan.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setDeleteOpen(false)}>
-              Cancel
+              Batal
             </Button>
             <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
               {deleting && <Loader2 className="h-4 w-4 animate-spin" />}
-              Delete trip
+              Hapus trip
             </Button>
           </DialogFooter>
         </DialogContent>

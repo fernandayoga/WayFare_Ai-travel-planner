@@ -3,8 +3,8 @@ import { Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function EmptyTrips({
-  title = "No trips yet",
-  body = "Create your first trip and Wayfare will put together a full itinerary and budget for you.",
+  title = "Belum ada trip",
+  body = "Buat trip pertama Anda dan Wayfare akan menyusun Itinerary lengkap dan Budget untuk Anda.",
 }: {
   title?: string;
   body?: string;
@@ -17,7 +17,7 @@ export function EmptyTrips({
       <h3 className="font-display text-lg text-ink">{title}</h3>
       <p className="mt-1.5 max-w-sm text-sm text-ink-soft">{body}</p>
       <Button asChild variant="primary" className="mt-5">
-        <Link href="/trips/new">Plan a trip</Link>
+        <Link href="/trips/new">Rencanakan trip</Link>
       </Button>
     </div>
   );

@@ -29,7 +29,7 @@ export default async function TripDetailPage({
         href="/trips"
         className="inline-flex items-center gap-1.5 text-sm text-ink-soft hover:text-ink"
       >
-        <ArrowLeft className="h-3.5 w-3.5" /> My Trips
+        <ArrowLeft className="h-3.5 w-3.5" /> Trip Saya
       </Link>
 
       <div className="overflow-hidden rounded-lg border border-line bg-card">
@@ -52,7 +52,7 @@ export default async function TripDetailPage({
               </span>
               <span className="flex items-center gap-1.5">
                 <Users className="h-4 w-4" />
-                {trip.travelers} traveler{trip.travelers > 1 ? "s" : ""}
+                {trip.travelers} wisatawan
               </span>
               <span className="flex items-center gap-1.5">
                 <Wallet className="h-4 w-4" />
@@ -74,20 +74,20 @@ export default async function TripDetailPage({
       {trip.status === "generating" && (
         <Card className="flex flex-col items-center justify-center gap-3 px-8 py-20 text-center">
           <Loader2 className="h-8 w-8 animate-spin text-moss" />
-          <p className="font-display text-lg text-ink">Wayfare is planning this trip</p>
-          <p className="text-sm text-ink-soft">Refresh in a few seconds if this doesn&rsquo;t update.</p>
+          <p className="font-display text-lg text-ink">Wayfare sedang merencanakan trip ini</p>
+          <p className="text-sm text-ink-soft">Muat ulang dalam beberapa detik jika tidak ada pembaruan.</p>
         </Card>
       )}
 
       {trip.status === "error" && (
         <Card className="flex flex-col items-center justify-center gap-3 px-8 py-16 text-center">
           <AlertTriangle className="h-8 w-8 text-danger" />
-          <p className="font-display text-lg text-ink">This itinerary couldn&rsquo;t be generated</p>
+          <p className="font-display text-lg text-ink">Itinerary ini tidak dapat dibuat</p>
           <p className="max-w-md text-sm text-ink-soft">
-            {trip.errorMessage ?? "Something went wrong while planning this trip."}
+            {trip.errorMessage ?? "Terjadi kesalahan saat merencanakan trip ini."}
           </p>
           <p className="text-xs text-ink-soft/70">
-            Use &ldquo;Regenerate itinerary&rdquo; from the menu above to try again.
+            Gunakan &ldquo;Buat ulang Itinerary&rdquo; dari menu di atas untuk mencoba lagi.
           </p>
         </Card>
       )}

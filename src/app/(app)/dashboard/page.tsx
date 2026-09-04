@@ -32,13 +32,13 @@ export default async function DashboardPage() {
     <div className="space-y-10">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <p className="text-sm text-ink-soft">Welcome back</p>
+          <p className="text-sm text-ink-soft">Selamat datang kembali</p>
           <h1 className="font-display text-2xl font-medium text-ink sm:text-3xl">
-            {firstName}&rsquo;s trips
+            Trip {firstName}
           </h1>
         </div>
         <Button asChild variant="primary">
-          <Link href="/trips/new">Plan a new trip</Link>
+          <Link href="/trips/new">Rencanakan trip baru</Link>
         </Button>
       </div>
 
@@ -46,21 +46,21 @@ export default async function DashboardPage() {
         <Card className="p-5">
           <div className="flex items-center gap-2 text-ink-soft">
             <MapPin className="h-4 w-4" />
-            <p className="text-xs font-medium uppercase tracking-wide">Trips planned</p>
+            <p className="text-xs font-medium uppercase tracking-wide">Trip direncanakan</p>
           </div>
           <p className="mt-2 font-display text-3xl text-ink">{trips.length}</p>
         </Card>
         <Card className="p-5">
           <div className="flex items-center gap-2 text-ink-soft">
             <CalendarClock className="h-4 w-4" />
-            <p className="text-xs font-medium uppercase tracking-wide">Days itinerary-ready</p>
+            <p className="text-xs font-medium uppercase tracking-wide">Hari Itinerary siap</p>
           </div>
           <p className="mt-2 font-display text-3xl text-ink">{totalDays}</p>
         </Card>
         <Card className="p-5">
           <div className="flex items-center gap-2 text-ink-soft">
             <Wallet className="h-4 w-4" />
-            <p className="text-xs font-medium uppercase tracking-wide">Combined budget</p>
+            <p className="text-xs font-medium uppercase tracking-wide">Total Budget</p>
           </div>
           <p className="mt-2 font-display text-3xl text-ink">
             {totalBudget > 0 ? formatCurrency(totalBudget, readyTrips[0]?.currency ?? "USD") : "—"}
@@ -72,14 +72,14 @@ export default async function DashboardPage() {
         <Card className="flex flex-col justify-between gap-4 border-moss/30 bg-moss-tint/40 p-6 sm:flex-row sm:items-center">
           <div>
             <p className="text-xs font-medium uppercase tracking-wide text-moss-dark">
-              Next up
+              Selanjutnya
             </p>
             <p className="mt-1 font-display text-xl text-ink">{upcoming.title}</p>
             <p className="text-sm text-ink-soft">{upcoming.destination}</p>
           </div>
           <Button asChild variant="primary">
             <Link href={`/trips/${upcoming.id}`}>
-              View itinerary <ArrowRight className="h-4 w-4" />
+              Lihat Itinerary <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
         </Card>
@@ -87,10 +87,10 @@ export default async function DashboardPage() {
 
       <div>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-display text-xl text-ink">Recent trips</h2>
+          <h2 className="font-display text-xl text-ink">Trip terbaru</h2>
           {trips.length > 0 && (
             <Link href="/trips" className="text-sm font-medium text-moss hover:underline">
-              View all
+              Lihat semua
             </Link>
           )}
         </div>

@@ -27,7 +27,7 @@ export function TripCard({ trip }: { trip: TripSummary }) {
           <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-ink-soft">
             <span className="flex items-center gap-1">
               <CalendarDays className="h-3.5 w-3.5" />
-              {formatDate(trip.startDate)} · {days}d
+              {formatDate(trip.startDate)} · {days} hari
             </span>
             <span className="flex items-center gap-1">
               <Users className="h-3.5 w-3.5" />

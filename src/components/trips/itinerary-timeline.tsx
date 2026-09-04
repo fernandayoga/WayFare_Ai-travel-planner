@@ -16,14 +16,14 @@ import { cn, durationLabel, formatCurrency, formatDateShort } from "@/lib/utils"
 import type { IDayPlan, ActivityCategory } from "@/models/Trip";
 
 const CATEGORY_META: Record<ActivityCategory, { icon: typeof UtensilsCrossed; label: string }> = {
-  food: { icon: UtensilsCrossed, label: "Food" },
-  sightseeing: { icon: Landmark, label: "Sightseeing" },
-  transport: { icon: Car, label: "Transport" },
-  accommodation: { icon: BedDouble, label: "Stay" },
-  activity: { icon: Sparkle, label: "Activity" },
-  shopping: { icon: ShoppingBag, label: "Shopping" },
-  relaxation: { icon: Waves, label: "Relaxation" },
-  other: { icon: CircleDot, label: "Other" },
+  food: { icon: UtensilsCrossed, label: "Kuliner" },
+  sightseeing: { icon: Landmark, label: "Wisata" },
+  transport: { icon: Car, label: "Transportasi" },
+  accommodation: { icon: BedDouble, label: "Penginapan" },
+  activity: { icon: Sparkle, label: "Aktivitas" },
+  shopping: { icon: ShoppingBag, label: "Belanja" },
+  relaxation: { icon: Waves, label: "Relaksasi" },
+  other: { icon: CircleDot, label: "Lainnya" },
 };
 
 export function ItineraryTimeline({
@@ -51,7 +51,7 @@ export function ItineraryTimeline({
             )}
           >
             <span className={cn("text-xs font-medium", i === activeDay ? "text-moss-dark" : "text-ink-soft")}>
-              Day {d.day}
+              Hari {d.day}
             </span>
             <span className="text-[11px] text-ink-soft/70">{formatDateShort(d.date)}</span>
           </button>
@@ -84,7 +84,7 @@ export function ItineraryTimeline({
                     <span className="whitespace-nowrap text-sm font-medium text-ink">
                       {activity.estimatedCost > 0
                         ? formatCurrency(activity.estimatedCost, currency)
-                        : "Free"}
+                        : "Gratis"}
                     </span>
                   </div>
                   <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">{activity.description}</p>

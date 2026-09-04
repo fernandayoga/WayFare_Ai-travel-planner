@@ -13,10 +13,10 @@ export interface ChatMessage {
 }
 
 const SUGGESTIONS = [
-  "Make it more relaxed",
-  "Cut the budget by 20%",
-  "Add more local food spots",
-  "Make day 2 less packed",
+  "Buat lebih santai",
+  "Kurangi Budget 20%",
+  "Tambah lebih banyak spot kuliner lokal",
+  "Buat hari ke-2 tidak terlalu padat",
 ];
 
 export function AssistantChat({
@@ -63,7 +63,7 @@ export function AssistantChat({
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error ?? "Couldn't apply that change");
+        setError(data.error ?? "Tidak dapat menerapkan perubahan itu");
         if (data.trip) {
           setMessages(
             data.trip.chatHistory.map((m: ChatMessage) => ({
@@ -85,7 +85,7 @@ export function AssistantChat({
       );
       onUpdated(data.trip);
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError("Terjadi kesalahan. Silakan coba lagi.");
     } finally {
       setLoading(false);
     }
@@ -98,15 +98,15 @@ export function AssistantChat({
           <Sparkles className="h-4 w-4" />
         </span>
         <div>
-          <p className="text-sm font-medium text-ink">Trip assistant</p>
-          <p className="text-xs text-ink-soft">Ask for changes in plain language</p>
+          <p className="text-sm font-medium text-ink">Asisten Trip</p>
+          <p className="text-xs text-ink-soft">Minta perubahan dengan bahasa sehari-hari</p>
         </div>
       </div>
 
       <div ref={scrollRef} className="thin-scroll flex-1 space-y-3 overflow-y-auto p-4">
         {messages.length === 0 && (
           <p className="rounded-md bg-paper-dim p-3 text-sm text-ink-soft">
-            Try asking to adjust the pace, swap an activity, or reduce the budget - the itinerary updates right here.
+            Coba minta ubah tempo, ganti aktivitas, atau kurangi Budget - Itinerary akan langsung diperbarui di sini.
           </p>
         )}
         {messages.map((m, i) => (
@@ -124,7 +124,7 @@ export function AssistantChat({
         ))}
         {loading && (
           <div className="flex items-center gap-2 rounded-md bg-paper-dim px-3 py-2 text-sm text-ink-soft">
-            <Loader2 className="h-3.5 w-3.5 animate-spin" /> Updating your itinerary...
+            <Loader2 className="h-3.5 w-3.5 animate-spin" /> Memperbarui Itinerary Anda...
           </div>
         )}
       </div>
@@ -162,7 +162,7 @@ export function AssistantChat({
               send(input);
             }
           }}
-          placeholder={disabled ? "Available once the itinerary is ready" : "e.g. Make day 3 more relaxed"}
+          placeholder={disabled ? "Tersedia setelah Itinerary siap" : "contoh: Buat hari ke-3 lebih santai"}
           disabled={disabled || loading}
           className="min-h-[42px] resize-none"
           rows={1}

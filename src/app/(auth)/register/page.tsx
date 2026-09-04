@@ -23,7 +23,7 @@ export default function RegisterPage() {
 
     const parsed = registerSchema.safeParse(form);
     if (!parsed.success) {
-      setError(parsed.error.issues[0]?.message ?? "Check your details and try again");
+      setError(parsed.error.issues[0]?.message ?? "Periksa kembali detail Anda dan coba lagi");
       return;
     }
 
@@ -37,7 +37,7 @@ export default function RegisterPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error ?? "Couldn't create your account");
+        setError(data.error ?? "Tidak dapat membuat akun Anda");
         return;
       }
 
@@ -55,7 +55,7 @@ export default function RegisterPage() {
       router.push("/dashboard");
       router.refresh();
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError("Terjadi kesalahan. Silakan coba lagi.");
     } finally {
       setLoading(false);
     }
@@ -64,18 +64,18 @@ export default function RegisterPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Create your account</CardTitle>
-        <CardDescription>Start planning trips with Wayfare - it&apos;s free.</CardDescription>
+        <CardTitle>Buat akun Anda</CardTitle>
+        <CardDescription>Mulai merencanakan trip dengan Wayfare - gratis.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="name">Full name</Label>
+            <Label htmlFor="name">Nama lengkap</Label>
             <Input
               id="name"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="Jane Traveler"
+              placeholder="Budi Traveler"
               autoComplete="name"
               required
             />
@@ -87,7 +87,7 @@ export default function RegisterPage() {
               type="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              placeholder="you@example.com"
+              placeholder="anda@contoh.com"
               autoComplete="email"
               required
             />
@@ -99,7 +99,7 @@ export default function RegisterPage() {
               type="password"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
-              placeholder="At least 8 characters"
+              placeholder="Minimal 8 karakter"
               autoComplete="new-password"
               required
             />
@@ -109,13 +109,13 @@ export default function RegisterPage() {
           )}
           <Button type="submit" variant="primary" className="w-full" disabled={loading}>
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-            Create account
+            Buat akun
           </Button>
         </form>
         <p className="mt-5 text-center text-sm text-ink-soft">
-          Already have an account?{" "}
+          Sudah punya akun?{" "}
           <Link href="/login" className="font-medium text-moss hover:underline">
-            Log in
+            Masuk
           </Link>
         </p>
       </CardContent>

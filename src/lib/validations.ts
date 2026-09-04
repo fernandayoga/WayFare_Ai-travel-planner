@@ -3,32 +3,32 @@ import { ACTIVITY_CATEGORIES, INTERESTS, TRAVEL_STYLES } from "@/lib/constants";
 
 // ---------- Auth ----------
 export const registerSchema = z.object({
-  name: z.string().trim().min(2, "Name must be at least 2 characters").max(80),
-  email: z.string().trim().toLowerCase().email("Enter a valid email"),
-  password: z.string().min(8, "Password must be at least 8 characters").max(72),
+  name: z.string().trim().min(2, "Nama minimal 2 karakter").max(80),
+  email: z.string().trim().toLowerCase().email("Masukkan email yang valid"),
+  password: z.string().min(8, "Password minimal 8 karakter").max(72),
 });
 export type RegisterInput = z.infer<typeof registerSchema>;
 
 export const loginSchema = z.object({
-  email: z.string().trim().toLowerCase().email("Enter a valid email"),
-  password: z.string().min(1, "Password is required"),
+  email: z.string().trim().toLowerCase().email("Masukkan email yang valid"),
+  password: z.string().min(1, "Password wajib diisi"),
 });
 export type LoginInput = z.infer<typeof loginSchema>;
 
 // ---------- Trip creation ----------
 export const createTripSchema = z
   .object({
-    destination: z.string().trim().min(2, "Tell us where you're headed").max(120),
-    startDate: z.string().min(1, "Pick a start date"),
-    endDate: z.string().min(1, "Pick an end date"),
-    travelers: z.coerce.number().int().min(1, "At least 1 traveler").max(30),
-    budget: z.coerce.number().min(1, "Budget must be greater than 0"),
+    destination: z.string().trim().min(2, "Beritahu kami tujuan Anda").max(120),
+    startDate: z.string().min(1, "Pilih tanggal mulai"),
+    endDate: z.string().min(1, "Pilih tanggal selesai"),
+    travelers: z.coerce.number().int().min(1, "Minimal 1 orang").max(30),
+    budget: z.coerce.number().min(1, "Budget harus lebih besar dari 0"),
     currency: z.enum(["USD", "IDR", "EUR", "SGD"]).default("USD"),
     travelStyle: z.enum(TRAVEL_STYLES),
-    interests: z.array(z.enum(INTERESTS)).min(1, "Pick at least one interest"),
+    interests: z.array(z.enum(INTERESTS)).min(1, "Pilih minimal satu minat"),
   })
   .refine((data) => new Date(data.endDate) >= new Date(data.startDate), {
-    message: "End date must be on or after the start date",
+    message: "Tanggal selesai harus sama atau setelah tanggal mulai",
     path: ["endDate"],
   })
   .refine(
@@ -40,7 +40,7 @@ export const createTripSchema = z
         ) + 1;
       return days <= 30;
     },
-    { message: "Trips longer than 30 days aren't supported yet", path: ["endDate"] }
+    { message: "Perjalanan lebih dari 30 hari belum didukung", path: ["endDate"] }
   );
 export type CreateTripInput = z.infer<typeof createTripSchema>;
 
@@ -84,6 +84,6 @@ export type AiItinerary = z.infer<typeof aiItinerarySchema>;
 
 // ---------- AI assistant follow-up ----------
 export const assistantRequestSchema = z.object({
-  message: z.string().trim().min(2, "Tell the assistant what to change").max(1000),
+  message: z.string().trim().min(2, "Beritahu asisten apa yang ingin diubah").max(1000),
 });
 export type AssistantRequestInput = z.infer<typeof assistantRequestSchema>;

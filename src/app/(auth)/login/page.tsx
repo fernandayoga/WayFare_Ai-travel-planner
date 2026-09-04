@@ -26,7 +26,7 @@ function LoginForm() {
 
     const parsed = loginSchema.safeParse(form);
     if (!parsed.success) {
-      setError(parsed.error.issues[0]?.message ?? "Check your details and try again");
+      setError(parsed.error.issues[0]?.message ?? "Periksa kembali detail Anda dan coba lagi");
       return;
     }
 
@@ -39,14 +39,14 @@ function LoginForm() {
       });
 
       if (result?.error) {
-        setError("Incorrect email or password");
+        setError("Email atau password salah");
         return;
       }
 
       router.push(callbackUrl);
       router.refresh();
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError("Terjadi kesalahan. Silakan coba lagi.");
     } finally {
       setLoading(false);
     }
@@ -55,8 +55,8 @@ function LoginForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Welcome back</CardTitle>
-        <CardDescription>Log in to see and edit your trips.</CardDescription>
+        <CardTitle>Selamat datang kembali</CardTitle>
+        <CardDescription>Masuk untuk melihat dan mengedit trip Anda.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -67,7 +67,7 @@ function LoginForm() {
               type="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              placeholder="you@example.com"
+              placeholder="anda@contoh.com"
               autoComplete="email"
               required
             />
@@ -79,7 +79,7 @@ function LoginForm() {
               type="password"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
-              placeholder="Your password"
+              placeholder="Password Anda"
               autoComplete="current-password"
               required
             />
@@ -89,13 +89,13 @@ function LoginForm() {
           )}
           <Button type="submit" variant="primary" className="w-full" disabled={loading}>
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-            Log in
+            Masuk
           </Button>
         </form>
         <p className="mt-5 text-center text-sm text-ink-soft">
-          New to Wayfare?{" "}
+          Baru menggunakan Wayfare?{" "}
           <Link href="/register" className="font-medium text-moss hover:underline">
-            Create an account
+            Buat akun
           </Link>
         </p>
       </CardContent>

@@ -13,13 +13,13 @@ export default async function TripsPage() {
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <h1 className="font-display text-2xl font-medium text-ink sm:text-3xl">My Trips</h1>
+          <h1 className="font-display text-2xl font-medium text-ink sm:text-3xl">Trip Saya</h1>
           <p className="mt-1 text-sm text-ink-soft">
-            {trips.length} trip{trips.length === 1 ? "" : "s"} planned so far
+            {trips.length} trip telah direncanakan sejauh ini
           </p>
         </div>
         <Button asChild variant="primary">
-          <Link href="/trips/new">Plan a new trip</Link>
+          <Link href="/trips/new">Rencanakan trip baru</Link>
         </Button>
       </div>
 

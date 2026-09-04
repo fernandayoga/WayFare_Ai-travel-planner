@@ -17,7 +17,7 @@ import { cn, initials } from "@/lib/utils";
 
 const NAV_LINKS = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutGrid },
-  { href: "/trips", label: "My Trips", icon: Map },
+  { href: "/trips", label: "Trip Saya", icon: Map },
 ];
 
 export function AppNav({ userName, userEmail }: { userName: string; userEmail: string }) {
@@ -49,12 +49,7 @@ export function AppNav({ userName, userEmail }: { userName: string; userEmail: s
           </nav>
         </div>
         <div className="flex items-center gap-3">
-          <Button asChild size="sm" variant="primary">
-            <Link href="/trips/new">
-              <Plus className="h-4 w-4" />
-              New trip
-            </Link>
-          </Button>
+         
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button

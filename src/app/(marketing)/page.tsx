@@ -5,50 +5,50 @@ import { Badge } from "@/components/ui/badge";
 import { DestinationArt } from "@/components/trips/destination-art";
 
 const SAMPLE_DAY = {
-  destination: "Kyoto, Japan",
-  theme: "Temples & Tea Houses",
+  destination: "Kyoto, Jepang",
+  theme: "Kuil & Kedai Teh",
   activities: [
-    { time: "08:30", title: "Fushimi Inari Torii Trail", cost: "Free", category: "Sightseeing" },
-    { time: "11:00", title: "Nishiki Market food crawl", cost: "$28", category: "Food" },
-    { time: "14:00", title: "Gion tea ceremony", cost: "$45", category: "Activity" },
-    { time: "18:30", title: "Kaiseki dinner, Pontocho alley", cost: "$62", category: "Food" },
+    { time: "08:30", title: "Jalur Fushimi Inari Torii", cost: "Gratis", category: "Wisata" },
+    { time: "11:00", title: "Wisata kuliner Pasar Nishiki", cost: "$28", category: "Kuliner" },
+    { time: "14:00", title: "Upacara minum teh Gion", cost: "$45", category: "Aktivitas" },
+    { time: "18:30", title: "Makan malam Kaiseki, gang Pontocho", cost: "$62", category: "Kuliner" },
   ],
 };
 
 const STEPS = [
   {
     icon: MapPin,
-    title: "Tell Wayfare the shape of your trip",
-    body: "Destination, dates, traveler count, budget, pace, and what you're into — food, nature, nightlife, whatever.",
+    title: "Beri tahu Wayfare gambaran perjalanan Anda",
+    body: "Tujuan, tanggal, jumlah wisatawan, Budget, gaya liburan, dan minat Anda — kuliner, alam, hiburan malam, apa saja.",
   },
   {
     icon: Clock3,
-    title: "Get a day-by-day plan in minutes",
-    body: "A full itinerary lands with timed activities, locations, durations, and a cost for each stop — not generic suggestions.",
+    title: "Dapatkan rencana harian dalam hitungan menit",
+    body: "Sebuah Itinerary lengkap yang dilengkapi jadwal aktivitas, lokasi, durasi, dan estimasi biaya — bukan sekadar saran umum.",
   },
   {
     icon: MessageSquareText,
-    title: "Reshape it by asking",
-    body: '"Make day 3 more relaxed" or "cut the budget by 20%" — the assistant rewrites the plan and the numbers together.',
+    title: "Sesuaikan hanya dengan meminta",
+    body: '"Buat hari ke-3 lebih santai" atau "kurangi Budget sebesar 20%" — asisten AI akan menyusun ulang rencana dan biayanya sekaligus.',
   },
 ];
 
 const FEATURES = [
   {
-    title: "Real day-by-day structure",
-    body: "Every day gets timed activities with location, duration, and estimated cost, not a wall of paragraph text.",
+    title: "Struktur harian yang nyata",
+    body: "Setiap hari memiliki jadwal aktivitas dengan lokasi, durasi, dan estimasi biaya. Bukan sekadar teks paragraf yang panjang.",
   },
   {
-    title: "Budget that adds up",
-    body: "A category-by-category breakdown is generated alongside the itinerary, so you see where the money actually goes.",
+    title: "Budget yang masuk akal",
+    body: "Rincian biaya per kategori dibuat bersamaan dengan Itinerary, sehingga Anda bisa melihat ke mana uang Anda dialokasikan.",
   },
   {
-    title: "An assistant that edits, not just chats",
-    body: "Ask for a change in plain language and the itinerary and budget both update - no rebuilding from scratch.",
+    title: "Asisten yang mengedit, bukan cuma mengobrol",
+    body: "Minta perubahan dengan bahasa sehari-hari dan Itinerary serta Budget Anda akan otomatis diperbarui - tanpa harus mengulang dari awal.",
   },
   {
-    title: "Your trips, privately yours",
-    body: "Every trip is tied to your account. Only you can view, edit, or delete the trips you create.",
+    title: "Perjalanan Anda, privasi Anda",
+    body: "Setiap perjalanan terhubung ke akun Anda. Hanya Anda yang dapat melihat, mengedit, atau menghapus trip yang Anda buat.",
   },
 ];
 
@@ -59,29 +59,29 @@ export default function LandingPage() {
         <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_1fr]">
           <div>
             <h1 className="font-display text-[2.6rem] font-medium leading-[1.08] text-ink sm:text-[3.4rem]">
-              A full trip plan,
+              Rencana perjalanan utuh,
               <br />
-              built while you make coffee.
+              selesai sembari Anda ngopi.
             </h1>
             <p className="mt-5 max-w-md text-[15px] leading-relaxed text-ink-soft">
-              Wayfare turns a destination, a budget, and a few preferences into a
-              day-by-day itinerary with real activities, locations, and costs —
-              then lets you refine it just by asking.
+              Wayfare mengubah tujuan, Budget, dan preferensi Anda menjadi sebuah Itinerary
+              harian dengan aktivitas, lokasi, dan biaya nyata —
+              lalu memungkinkan Anda menyesuaikannya cukup dengan meminta.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button asChild size="lg" variant="primary">
                 <Link href="/register">
-                  Plan your first trip <ArrowRight className="h-4 w-4" />
+                  Rencanakan trip pertama Anda <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
              
             </div>
             <div className="mt-10 flex items-center gap-6 text-xs text-ink-soft">
-              <span>No credit card</span>
+              <span>Tanpa kartu kredit</span>
               <span className="hairline w-6" />
-              <span>Free to try</span>
+              <span>Gratis dicoba</span>
               <span className="hairline w-6" />
-              <span>Your data stays yours</span>
+              <span>Data Anda tetap milik Anda</span>
             </div>
           </div>
 
@@ -93,7 +93,7 @@ export default function LandingPage() {
               <div className="border-t border-line p-5">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs uppercase tracking-wide text-ink-soft/70">Day 2</p>
+                    <p className="text-xs uppercase tracking-wide text-ink-soft/70">Hari ke-2</p>
                     <p className="font-display text-lg text-ink">{SAMPLE_DAY.theme}</p>
                   </div>
                   <Badge variant="gold">{SAMPLE_DAY.destination}</Badge>
@@ -123,14 +123,14 @@ export default function LandingPage() {
 
       <section id="how-it-works" className="border-t border-line bg-paper-dim/60">
         <div className="mx-auto max-w-6xl px-6 py-16">
-          <h2 className="font-display text-2xl font-medium text-ink sm:text-3xl">How it works</h2>
+          <h2 className="font-display text-2xl font-medium text-ink sm:text-3xl">Cara kerjanya</h2>
           <div className="mt-10 grid gap-8 sm:grid-cols-3">
             {STEPS.map((step, i) => (
               <div key={step.title}>
                 <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-moss text-paper">
                   <step.icon className="h-5 w-5" />
                 </div>
-                <p className="text-xs font-medium text-gold">Step {i + 1}</p>
+                <p className="text-xs font-medium text-gold">Langkah {i + 1}</p>
                 <h3 className="mt-1 font-display text-lg text-ink">{step.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-ink-soft">{step.body}</p>
               </div>
@@ -142,11 +142,10 @@ export default function LandingPage() {
       <section id="features" className="mx-auto max-w-6xl px-6 py-16">
         <div className="max-w-lg">
           <h2 className="font-display text-2xl font-medium text-ink sm:text-3xl">
-            Built for planning trips, not chatting about them
+            Dibuat untuk merencanakan trip, bukan sekadar basa-basi
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-ink-soft">
-            Wayfare focuses on getting from an idea to a usable plan - clean itinerary
-            structure, a budget you can trust, and quick edits when your plans change.
+            Wayfare fokus pada hasil akhir - dari ide menjadi rencana yang siap dipakai. Struktur Itinerary yang rapi, Budget yang bisa dipercaya, dan kemudahan edit saat rencana Anda berubah.
           </p>
         </div>
         <div className="mt-10 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
@@ -163,12 +162,12 @@ export default function LandingPage() {
         <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-6 py-16 sm:flex-row sm:items-center">
           <div>
             <Wallet className="mb-3 h-6 w-6 text-gold" />
-            <h2 className="font-display text-2xl font-medium text-ink">Ready to see your itinerary?</h2>
-            <p className="mt-1 text-sm text-ink-soft">It takes about a minute to describe your trip.</p>
+            <h2 className="font-display text-2xl font-medium text-ink">Siap melihat Itinerary Anda?</h2>
+            <p className="mt-1 text-sm text-ink-soft">Hanya butuh semenit untuk memberi tahu kami tentang rencana perjalanan Anda.</p>
           </div>
           <Button asChild size="lg" variant="primary">
             <Link href="/register">
-              Create your first trip <ArrowRight className="h-4 w-4" />
+              Buat trip pertama Anda <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
         </div>
