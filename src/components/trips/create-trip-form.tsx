@@ -1,0 +1,393 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Loader2, ArrowLeft, ArrowRight, MapPin, Wallet, Sparkles, Heart } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+import { createTripSchema, type CreateTripInput } from "@/lib/validations";
+import { INTEREST_OPTIONS, TRAVEL_STYLE_OPTIONS, CURRENCY_OPTIONS } from "@/components/trips/interest-options";
+import { useToast } from "@/components/ui/use-toast";
+import type { Interest, TravelStyle } from "@/models/Trip";
+
+const STEPS = [
+  { key: "destination", label: "Destination", icon: MapPin },
+  { key: "budget", label: "Travelers & budget", icon: Wallet },
+  { key: "style", label: "Travel style", icon: Sparkles },
+  { key: "interests", label: "Interests", icon: Heart },
+] as const;
+
+const LOADING_MESSAGES = [
+  "Reading up on your destination...",
+  "Balancing sightseeing and downtime...",
+  "Pricing out activities and meals...",
+  "Building your day-by-day plan...",
+  "Double-checking the budget adds up...",
+];
+
+type FormState = {
+  destination: string;
+  startDate: string;
+  endDate: string;
+  travelers: string;
+  budget: string;
+  currency: (typeof CURRENCY_OPTIONS)[number];
+  travelStyle: TravelStyle | "";
+  interests: Interest[];
+};
+
+const initialState: FormState = {
+  destination: "",
+  startDate: "",
+  endDate: "",
+  travelers: "2",
+  budget: "",
+  currency: "USD",
+  travelStyle: "",
+  interests: [],
+};
+
+export function CreateTripForm() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const [step, setStep] = useState(0);
+  const [form, setForm] = useState<FormState>(initialState);
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [loadingMsgIndex, setLoadingMsgIndex] = useState(0);
+
+  useEffect(() => {
+    if (!submitting) return;
+    const interval = setInterval(() => {
+      setLoadingMsgIndex((i) => (i + 1) % LOADING_MESSAGES.length);
+    }, 2600);
+    return () => clearInterval(interval);
+  }, [submitting]);
+
+  function update<K extends keyof FormState>(key: K, value: FormState[K]) {
+    setForm((f) => ({ ...f, [key]: value }));
+  }
+
+  function toggleInterest(interest: Interest) {
+    setForm((f) => ({
+      ...f,
+      interests: f.interests.includes(interest)
+        ? f.interests.filter((i) => i !== interest)
+        : [...f.interests, interest],
+    }));
+  }
+
+  function validateStep(index: number): string | null {
+    if (index === 0) {
+      if (!form.destination.trim()) return "Tell us where you're headed";
+      if (!form.startDate || !form.endDate) return "Pick your travel dates";
+      if (new Date(form.endDate) < new Date(form.startDate))
+        return "End date must be on or after the start date";
+    }
+    if (index === 1) {
+      if (!form.travelers || Number(form.travelers) < 1) return "At least 1 traveler";
+      if (!form.budget || Number(form.budget) <= 0) return "Enter a budget greater than 0";
+    }
+    if (index === 2) {
+      if (!form.travelStyle) return "Pick a travel style";
+    }
+    if (index === 3) {
+      if (form.interests.length === 0) return "Pick at least one interest";
+    }
+    return null;
+  }
+
+  function goNext() {
+    const err = validateStep(step);
+    if (err) {
+      setError(err);
+      return;
+    }
+    setError(null);
+    setStep((s) => Math.min(s + 1, STEPS.length - 1));
+  }
+
+  function goBack() {
+    setError(null);
+    setStep((s) => Math.max(s - 1, 0));
+  }
+
+  async function handleSubmit() {
+    const err = validateStep(3);
+    if (err) {
+      setError(err);
+      return;
+    }
+
+    const payload: CreateTripInput = {
+      destination: form.destination.trim(),
+      startDate: form.startDate,
+      endDate: form.endDate,
+      travelers: Number(form.travelers),
+      budget: Number(form.budget),
+      currency: form.currency,
+      travelStyle: form.travelStyle as TravelStyle,
+      interests: form.interests,
+    };
+
+    const parsed = createTripSchema.safeParse(payload);
+    if (!parsed.success) {
+      setError(parsed.error.issues[0]?.message ?? "Check your details and try again");
+      return;
+    }
+
+    setError(null);
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/trips", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(parsed.data),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error ?? "Couldn't create this trip");
+        setSubmitting(false);
+        return;
+      }
+
+      if (data.status === "error") {
+        toast({
+          title: "The AI planner had trouble with this trip",
+          description: "You can retry generation from the trip page.",
+          variant: "destructive",
+        });
+      } else {
+        toast({ title: "Itinerary ready", description: "Your trip has been planned.", variant: "success" });
+      }
+
+      router.push(`/trips/${data.id}`);
+    } catch {
+      setError("Something went wrong. Please try again.");
+      setSubmitting(false);
+    }
+  }
+
+  if (submitting) {
+    return (
+      <Card className="flex flex-col items-center justify-center gap-4 px-8 py-20 text-center">
+        <Loader2 className="h-8 w-8 animate-spin text-moss" />
+        <div>
+          <p className="font-display text-xl text-ink">Planning {form.destination}</p>
+          <p className="mt-1 text-sm text-ink-soft">{LOADING_MESSAGES[loadingMsgIndex]}</p>
+        </div>
+        <p className="max-w-xs text-xs text-ink-soft/70">
+          This usually takes 10–30 seconds. Please don&rsquo;t close this tab.
+        </p>
+      </Card>
+    );
+  }
+
+  return (
+    <div>
+      <ol className="mb-8 flex items-center gap-2">
+        {STEPS.map((s, i) => (
+          <li key={s.key} className="flex flex-1 items-center gap-2">
+            <div
+              className={cn(
+                "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-medium",
+                i < step && "border-moss bg-moss text-paper",
+                i === step && "border-moss text-moss",
+                i > step && "border-line text-ink-soft/60"
+              )}
+            >
+              <s.icon className="h-3.5 w-3.5" />
+            </div>
+            <span
+              className={cn(
+                "hidden text-xs font-medium sm:inline",
+                i === step ? "text-ink" : "text-ink-soft/60"
+              )}
+            >
+              {s.label}
+            </span>
+            {i < STEPS.length - 1 && <span className="hairline flex-1" />}
+          </li>
+        ))}
+      </ol>
+
+      <Card className="p-6 sm:p-8">
+        {step === 0 && (
+          <div className="space-y-5">
+            <div>
+              <h2 className="font-display text-xl text-ink">Where are you headed?</h2>
+              <p className="text-sm text-ink-soft">A city, region, or country works.</p>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="destination">Destination</Label>
+              <Input
+                id="destination"
+                placeholder="e.g. Kyoto, Japan"
+                value={form.destination}
+                onChange={(e) => update("destination", e.target.value)}
+                autoFocus
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="startDate">Start date</Label>
+                <Input
+                  id="startDate"
+                  type="date"
+                  value={form.startDate}
+                  onChange={(e) => update("startDate", e.target.value)}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="endDate">End date</Label>
+                <Input
+                  id="endDate"
+                  type="date"
+                  value={form.endDate}
+                  onChange={(e) => update("endDate", e.target.value)}
+                  min={form.startDate || undefined}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {step === 1 && (
+          <div className="space-y-5">
+            <div>
+              <h2 className="font-display text-xl text-ink">Travelers &amp; budget</h2>
+              <p className="text-sm text-ink-soft">Budget covers the whole trip, all travelers combined.</p>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="travelers">Number of travelers</Label>
+              <Input
+                id="travelers"
+                type="number"
+                min={1}
+                max={30}
+                value={form.travelers}
+                onChange={(e) => update("travelers", e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-[1fr_auto] gap-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="budget">Total budget</Label>
+                <Input
+                  id="budget"
+                  type="number"
+                  min={1}
+                  placeholder="e.g. 2000"
+                  value={form.budget}
+                  onChange={(e) => update("budget", e.target.value)}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="currency">Currency</Label>
+                <Select value={form.currency} onValueChange={(v) => update("currency", v as FormState["currency"])}>
+                  <SelectTrigger id="currency" className="w-28">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CURRENCY_OPTIONS.map((c) => (
+                      <SelectItem key={c} value={c}>
+                        {c}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="space-y-5">
+            <div>
+              <h2 className="font-display text-xl text-ink">What&rsquo;s your pace?</h2>
+              <p className="text-sm text-ink-soft">This shapes how packed each day feels.</p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {TRAVEL_STYLE_OPTIONS.map((opt) => (
+                <button
+                  type="button"
+                  key={opt.value}
+                  onClick={() => update("travelStyle", opt.value)}
+                  className={cn(
+                    "rounded-md border p-4 text-left transition-colors",
+                    form.travelStyle === opt.value
+                      ? "border-moss bg-moss-tint"
+                      : "border-line hover:bg-paper-dim"
+                  )}
+                >
+                  <p className="font-medium text-ink">{opt.label}</p>
+                  <p className="mt-1 text-xs text-ink-soft">{opt.body}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="space-y-5">
+            <div>
+              <h2 className="font-display text-xl text-ink">What are you into?</h2>
+              <p className="text-sm text-ink-soft">Pick as many as fit - this steers the activities.</p>
+            </div>
+            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+              {INTEREST_OPTIONS.map((opt) => {
+                const checked = form.interests.includes(opt.value);
+                return (
+                  <label
+                    key={opt.value}
+                    className={cn(
+                      "flex cursor-pointer items-center gap-2 rounded-md border p-3 text-sm transition-colors",
+                      checked ? "border-moss bg-moss-tint" : "border-line hover:bg-paper-dim"
+                    )}
+                  >
+                    <Checkbox
+                      checked={checked}
+                      onCheckedChange={() => toggleInterest(opt.value)}
+                    />
+                    <opt.icon className="h-4 w-4 text-ink-soft" />
+                    {opt.label}
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {error && (
+          <p className="mt-5 rounded-md bg-danger-tint px-3 py-2 text-sm text-danger">{error}</p>
+        )}
+
+        <div className="mt-8 flex items-center justify-between">
+          <Button type="button" variant="ghost" onClick={goBack} disabled={step === 0}>
+            <ArrowLeft className="h-4 w-4" /> Back
+          </Button>
+          {step < STEPS.length - 1 ? (
+            <Button type="button" variant="primary" onClick={goNext}>
+              Next <ArrowRight className="h-4 w-4" />
+            </Button>
+          ) : (
+            <Button type="button" variant="primary" onClick={handleSubmit}>
+              <Sparkles className="h-4 w-4" /> Generate itinerary
+            </Button>
+          )}
+        </div>
+      </Card>
+    </div>
+  );
+}

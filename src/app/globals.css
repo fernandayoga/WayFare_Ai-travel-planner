@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+:root {
+  /* Core palette - warm editorial travel-journal tones (see design notes) */
+  --paper: #fbf7ee;
+  --paper-dim: #f3ecdd;
+  --ink: #17231f;
+  --ink-soft: #3d493f;
+  --moss: #2f5d48;
+  --moss-dark: #223f32;
+  --moss-tint: #e4ede7;
+  --gold: #bd8a2c;
+  --gold-tint: #f4e8cd;
+  --clay: #a8552f;
+  --clay-tint: #f1e0d4;
+  --line: #e3d8c2;
+  --card: #ffffff;
+  --danger: #b3432f;
+  --danger-tint: #f6e2dd;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --radius: 0.85rem;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-dim: var(--paper-dim);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-moss: var(--moss);
+  --color-moss-dark: var(--moss-dark);
+  --color-moss-tint: var(--moss-tint);
+  --color-gold: var(--gold);
+  --color-gold-tint: var(--gold-tint);
+  --color-clay: var(--clay);
+  --color-clay-tint: var(--clay-tint);
+  --color-line: var(--line);
+  --color-card: var(--card);
+  --color-danger: var(--danger);
+  --color-danger-tint: var(--danger-tint);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-manrope);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 8px);
+}
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--moss);
+  color: var(--paper);
+}
+
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+}
+
+/* Visible keyboard focus ring, kept subtle but unmistakable */
+:focus-visible {
+  outline: 2px solid var(--moss);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Thin decorative rule used sparingly as a structural device */
+.hairline {
+  height: 1px;
+  background: var(--line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom scrollbar for the itinerary rail / chat panel */
+.thin-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 999px;
+}
