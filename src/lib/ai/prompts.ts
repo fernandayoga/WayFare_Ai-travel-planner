@@ -37,6 +37,7 @@ Return ONLY a single valid JSON object (no markdown fences, no commentary, no ex
 Rules:
 - IMPORTANT: All generated text content (title, summary, theme, activity title, description) MUST be written in Indonesian language (Bahasa Indonesia).
 - DO NOT translate JSON keys or enum values. The "category" field MUST be one of the exact English strings provided above (e.g. "food").
+- You MUST include the "budgetBreakdown" object exactly as shown in the JSON structure. Do NOT omit it.
 - Every day in the date range must appear, in order, with 3-6 activities each, roughly chronological by time.
 - "budgetBreakdown.categories" percentages must sum to ~100.
 - "budgetBreakdown.total" must be the sum of all activity estimatedCost across all days (approximately), and should respect the traveler's budget as an upper guide - do not wildly exceed it.

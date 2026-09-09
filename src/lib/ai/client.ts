@@ -1,4 +1,4 @@
-import { getOpenRouterConfig } from "@/lib/env";
+import { getAIConfig } from "@/lib/env";
 
 interface ChatMessage {
   role: "system" | "user" | "assistant";
@@ -6,33 +6,31 @@ interface ChatMessage {
 }
 
 /**
- * Calls the OpenRouter chat completions endpoint and returns the raw text
- * content of the model's reply. This is server-only - it reads the API key
- * from process.env and must never be imported from client components.
+ * Calls the generic OpenAI-compatible chat completions endpoint and returns the raw text
+ * content of the model's reply.
  */
-export async function callOpenRouter(messages: ChatMessage[]): Promise<string> {
-  const { apiKey, model } = getOpenRouterConfig();
+export async function callAI(messages: ChatMessage[]): Promise<string> {
+  const { baseUrl, apiKey, model } = getAIConfig();
+  const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
 
-  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+  const res = await fetch(`${cleanBaseUrl}/chat/completions`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
-      // Optional but recommended by OpenRouter for attribution/rate-limit context.
-      "X-Title": "AI Travel Planner",
     },
     body: JSON.stringify({
       model,
       messages,
       temperature: 0.7,
-      response_format: { type: "json_object" },
+      max_tokens: 8000,
     }),
   });
 
   if (!res.ok) {
     const errText = await res.text().catch(() => "");
     throw new Error(
-      `OpenRouter request failed (${res.status}): ${errText || res.statusText}`
+      `AI API request failed (${res.status}): ${errText || res.statusText}`
     );
   }
 
@@ -40,7 +38,7 @@ export async function callOpenRouter(messages: ChatMessage[]): Promise<string> {
   const content: string | undefined = data?.choices?.[0]?.message?.content;
 
   if (!content) {
-    throw new Error("OpenRouter returned an empty response");
+    throw new Error("AI API returned an empty response");
   }
 
   return content;

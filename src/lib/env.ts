@@ -13,9 +13,10 @@ function requireEnv(name: string): string {
   return value;
 }
 
-export function getOpenRouterConfig() {
+export function getAIConfig() {
   return {
-    apiKey: requireEnv("OPENROUTER_API_KEY"),
-    model: process.env.OPENROUTER_MODEL || "openai/gpt-4o-mini",
+    baseUrl: process.env.AI_BASE_URL || "https://openrouter.ai/api/v1",
+    apiKey: requireEnv("AI_API_KEY"),
+    model: process.env.AI_MODEL || "openai/gpt-4o-mini",
   };
 }

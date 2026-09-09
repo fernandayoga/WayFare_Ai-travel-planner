@@ -92,8 +92,18 @@ export function CreateTripForm() {
     if (index === 0) {
       if (!form.destination.trim()) return "Beritahu kami tujuan Anda";
       if (!form.startDate || !form.endDate) return "Pilih tanggal perjalanan Anda";
-      if (new Date(form.endDate) < new Date(form.startDate))
+      
+      const start = new Date(form.startDate);
+      const end = new Date(form.endDate);
+      
+      if (end < start) {
         return "Tanggal selesai harus sama atau setelah tanggal mulai";
+      }
+      
+      const days = Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+      if (days > 30) {
+        return "Perjalanan maksimal 30 hari";
+      }
     }
     if (index === 1) {
       if (!form.travelers || Number(form.travelers) < 1) return "Minimal 1 orang";
@@ -119,6 +129,10 @@ export function CreateTripForm() {
   }
 
   function goBack() {
+    if (step === 0) {
+      router.push("/dashboard");
+      return;
+    }
     setError(null);
     setStep((s) => Math.max(s - 1, 0));
   }
@@ -261,6 +275,7 @@ export function CreateTripForm() {
                 />
               </div>
             </div>
+           
           </div>
         )}
 
@@ -374,15 +389,15 @@ export function CreateTripForm() {
         )}
 
         <div className="mt-8 flex items-center justify-between">
-          <Button type="button" variant="ghost" onClick={goBack} disabled={step === 0}>
+          <Button type="button" variant="ghost" onClick={goBack} className="cursor-pointer hover:bg-paper-dim hover:text-moss transition-all">
             <ArrowLeft className="h-4 w-4" /> Kembali
           </Button>
           {step < STEPS.length - 1 ? (
-            <Button type="button" variant="primary" onClick={goNext}>
+            <Button type="button" variant="primary" onClick={goNext} className="cursor-pointer hover:opacity-90 hover:scale-[1.02] transition-all">
               Lanjut <ArrowRight className="h-4 w-4" />
             </Button>
           ) : (
-            <Button type="button" variant="primary" onClick={handleSubmit}>
+            <Button type="button" variant="primary" onClick={handleSubmit} className="cursor-pointer hover:opacity-90 hover:scale-[1.02] transition-all">
               <Sparkles className="h-4 w-4" /> Buat Itinerary
             </Button>
           )}

@@ -1,13 +1,13 @@
-import { callOpenRouter, parseJsonResponse } from "@/lib/ai/openrouter";
+import { callAI, parseJsonResponse } from "@/lib/ai/client";
 import { buildAssistantPrompt, buildItineraryPrompt } from "@/lib/ai/prompts";
 import { aiItinerarySchema, type AiItinerary, type CreateTripInput } from "@/lib/validations";
-import { getOpenRouterConfig } from "@/lib/env";
+import { getAIConfig } from "@/lib/env";
 
 async function requestValidatedItinerary(
   system: string,
   user: string
 ): Promise<{ itinerary: AiItinerary; model: string }> {
-  const { model } = getOpenRouterConfig();
+  const { model } = getAIConfig();
 
   const messages = [
     { role: "system" as const, content: system },
@@ -20,7 +20,7 @@ async function requestValidatedItinerary(
   // ask it again with a stricter reminder before giving up.
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const raw = await callOpenRouter(
+      const raw = await callAI(
         attempt === 0
           ? messages
           : [
