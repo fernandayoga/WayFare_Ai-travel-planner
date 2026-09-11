@@ -15,9 +15,6 @@ export function MarketingNav() {
           <Button asChild variant="ghost" size="sm">
             <Link href="/login">Log in</Link>
           </Button>
-          <Button asChild variant="primary" size="sm">
-            <Link href="/register">Start planning</Link>
-          </Button>
         </div>
       </div>
     </header>

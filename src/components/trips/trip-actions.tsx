@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, MoreVertical, Pencil, RefreshCcw, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -46,6 +46,7 @@ export function TripActions({
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [regenerating, setRegenerating] = useState(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const [form, setForm] = useState({
     destination,
@@ -92,15 +93,24 @@ export function TripActions({
 
   async function handleRegenerate() {
     setRegenerating(true);
+    abortControllerRef.current = new AbortController();
     try {
-      const res = await fetch(`/api/trips/${tripId}/regenerate`, { method: "POST" });
+      const res = await fetch(`/api/trips/${tripId}/regenerate`, { 
+        method: "POST",
+        signal: abortControllerRef.current.signal
+      });
       if (!res.ok) throw new Error();
       toast({ title: "Itinerary dibuat ulang", variant: "success" });
       router.refresh();
-    } catch {
-      toast({ title: "Pembuatan ulang gagal", variant: "destructive" });
+    } catch (err: any) {
+      if (err.name === 'AbortError') {
+        toast({ title: "Dibatalkan", description: "Proses dibatalkan.", variant: "default" });
+      } else {
+        toast({ title: "Pembuatan ulang gagal", variant: "destructive" });
+      }
     } finally {
       setRegenerating(false);
+      abortControllerRef.current = null;
     }
   }
 
@@ -204,6 +214,25 @@ export function TripActions({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {regenerating && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-paper/80 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-4 text-center p-6 bg-paper rounded-xl shadow-lg max-w-sm mx-4">
+            <Loader2 className="h-10 w-10 animate-spin text-moss" />
+            <div className="space-y-1">
+              <p className="text-lg font-medium text-ink">Merancang ulang Itinerary...</p>
+              <p className="text-sm text-ink-soft">Tunggu sebentar, AI sedang menyusun jadwal baru untuk Anda.</p>
+            </div>
+            <Button 
+              variant="outline" 
+              className="mt-2 w-full"
+              onClick={() => abortControllerRef.current?.abort()}
+            >
+              Batal
+            </Button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
